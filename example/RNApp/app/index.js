@@ -2,7 +2,7 @@ import React from 'react';
 import Meteor, { createContainer } from 'react-native-meteor';
 
 // react-native-meteor-redux
-import initMeteorRedux, {MeteorOffline} from 'react-native-meteor-redux';
+import initMeteorRedux from 'react-native-meteor-redux';
 import { AsyncStorage } from 'react-native';
 import { persistStore, autoRehydrate } from 'redux-persist';
 // end react-native-meteor-redux
@@ -14,24 +14,30 @@ import settings from './config/settings';
 
 Meteor.connect(settings.METEOR_URL);
 
-export const MO = new MeteorOffline();
 // react-native-meteor-redux
-// const MeteorStore = initMeteorRedux(undefined, autoRehydrate());
-// persistStore(MeteorStore, { storage: AsyncStorage, debounce: 1000 }, () => {
-//   MeteorStore.loaded();
-// });
-// setInterval(() => console.log(MeteorStore.getState(), Object.keys(MeteorStore.getState().details || {}).length), 10000);
-// export { MeteorStore }
+const MeteorStore = initMeteorRedux(undefined, autoRehydrate());
+persistStore(MeteorStore, { storage: AsyncStorage }, () => {
+  MeteorStore.loaded();
+});
+setTimeout(() => console.log(MeteorStore.getState()), 10000);
+export { MeteorStore }
 // end react-native-meteor-redux
 
 const RNApp = (props) => {
   const { status, user, loggingIn } = props;
 
+<<<<<<< HEAD
   console.log(loggingIn, status);
   // return <LoggedIn />;
   if (loggingIn && status.connected) {
     return <Loading />;
   } else if (user !== null) {
+=======
+  if (loggingIn) {
+    return <Loading />;
+  } else
+  if (user !== null) {
+>>>>>>> parent of 7378d05... Merge remote-tracking branch 'DesignmanIO/master'
     return <LoggedIn />;
   }
   return <LoggedOut />;

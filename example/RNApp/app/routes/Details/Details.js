@@ -14,7 +14,7 @@ const Details = ({ detailsReady }) => {
       <MeteorListView
         contentContainerStyle={styles.list}
         collection="details"
-        renderRow={(detail) => <Text style={styles.item}>{`${detail.name.first} ${detail.name.first}`}</Text>}
+        renderRow={(detail) => <Text style={styles.item}>{detail.name}</Text>}
       />
     </View>
   );

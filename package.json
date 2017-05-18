@@ -1,6 +1,10 @@
 {
   "name": "react-native-meteor-redux",
+<<<<<<< HEAD
   "version": "2.2.0",
+=======
+  "version": "1.1.20",
+>>>>>>> parent of 7378d05... Merge remote-tracking branch 'DesignmanIO/master'
   "description": "Link react-native-meteor to redux",
   "main": "connectMeteorRedux.js",
   "scripts": {
