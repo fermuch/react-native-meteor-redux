@@ -8,11 +8,21 @@ import _ from 'lodash';
 import EventEmitter from 'events';
 import { persistStore, autoRehydrate } from 'redux-persist';
 
+function fixId(id) {
+  // SEE: https://github.com/inProgress-team/react-native-meteor/issues/185
+  if (id.substr(0, 1) === '-') {
+    return id.substr(1);
+  }
+  return id;
+}
+
 const meteorReduxReducers = (
   state = { reactNativeMeteorOfflineRecentlyAdded: {} },
   action
 ) => {
-  const { type, collection, id, fields } = action;
+  const { type, collection, fields } = action;
+  const id = fixId(action.id);
+
   switch (type) {
     case 'SET_USRID': {
       return { ...state, userId: id };
