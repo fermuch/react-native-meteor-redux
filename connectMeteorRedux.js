@@ -51,11 +51,15 @@ const meteorReduxReducers = (
       return state;
     }
     case 'CHANGED': {
-      const tmpCollection = _.cloneDeep(state[collection]);
+      const tmpCollection = _.cloneDeep(state[collection]) || {};
       tmpCollection[id] = _.merge(tmpCollection[id], fields);
       return { ...state, [collection]: tmpCollection };
     }
     case 'REMOVED':
+      if (!state[collection]) {
+        // collection doesn't exist yet, add it
+        return { ...state, [collection]: {} };
+      }
       if (state[collection][id]) {
         const tmpCollection = _.cloneDeep(state[collection]);
         delete tmpCollection[id];
