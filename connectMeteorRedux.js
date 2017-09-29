@@ -10,7 +10,7 @@ import { persistStore, autoRehydrate } from 'redux-persist';
 
 function fixId(id) {
   // SEE: https://github.com/inProgress-team/react-native-meteor/issues/185
-  if (id.substr(0, 1) === '-') {
+  if ((id || '').substr(0, 1) === '-') {
     return id.substr(1);
   }
   return id;
