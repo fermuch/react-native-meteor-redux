@@ -218,7 +218,7 @@ class MeteorOffline {
   constructor(options = {}) {
     this.offline = true;
     // first time connecting since app open or connection restored
-    this.firstConnection = true;
+    this.firstConnection = {};
     this.subscriptions = [];
     this.collections = [];
     if (!options.store) {
@@ -241,7 +241,8 @@ class MeteorOffline {
         this.offline = false;
       } else {
         this.offline = true;
-        this.firstConnection = false;
+        // this.firstConnection = false;
+        // this.firstConnection = _.map(this.firstConnection, () => false);
       }
     });
   }
@@ -278,12 +279,15 @@ class MeteorOffline {
     return subHandle;
   }
   collection(collection, subscriptionName) {
+    if (typeof this.firstConnection[collection] === 'undefined') {
+      this.firstConnection[collection] = true;
+    }
     if (
       Meteor.status().connected &&
-      this.firstConnection &&
+      this.firstConnection[collection] &&
       _.get(this.subscriptions, `${subscriptionName}.ready`)
     ) {
-      this.firstConnection = false;
+      this.firstConnection[collection] = false;
       // const t = new Date();
       const added = _.sortBy(
         _.get(this.store.getState(), `reactNativeMeteorOfflineRecentlyAdded.${collection}`)
@@ -292,10 +296,10 @@ class MeteorOffline {
       // console.log(`got cached in ${new Date() - t}ms`);
       const removed = _.sortBy(_.difference(cached, added)) || [];
       // console.log(
-      //   `got difference in ${new Date() - t}ms`,
-      //   added,
-      //   cached,
-      //   removed,
+      //   `[${collection}] got difference in ${new Date() - t}ms`,
+      //   {added},
+      //   {cached},
+      //   {removed},
       //   this.store.getState().reactNativeMeteorOfflineRecentlyAdded
       // );
       this.store.dispatch({
@@ -304,7 +308,7 @@ class MeteorOffline {
         removed,
       });
     }
-    this.collections = _.uniq([...this.collections, collection]);
+    this.collections = _.uniq([ ...this.collections, collection ]);
     return Meteor.collection(collection);
   }
 }
